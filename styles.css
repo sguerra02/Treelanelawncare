@@ -1092,18 +1092,18 @@
 
 /* ❄️ Snowflakes */
 .snowflake {
-  color: white;
-  font-size: 12px;
+  color: lightblue;
+  font-size: 20px;
   animation-name: snow-fall;
 }
 
 @keyframes snow-fall {
   0% {
     transform: translateY(0) translateX(0);
-    opacity: 0.8;
+    opacity: 0.7;
   }
   100% {
-    transform: translateY(120vh) translateX(40px);
+    transform: translateY(60vh) translateX(40px);
     opacity: 0;
   }
 }
@@ -1117,10 +1117,63 @@
 @keyframes leaf-fall {
   0% {
     transform: translateY(0) rotate(0deg);
-    opacity: 0.9;
+    opacity: 0.7;
   }
   100% {
-    transform: translateY(120vh) rotate(360deg);
+    transform: translateY(60vh) rotate(360deg);
     opacity: 0;
   }
 }
+
+/* ============================
+   Spring / Summer Growth Line
+============================ */
+
+.growth-item {
+  position: absolute;
+  /*top: 110px; /* 🔒 fixed distance from top of page */
+  transform-origin: bottom center;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 🌱 Spring */
+.spring-growth {
+  font-size: 14px;
+  animation: spring-grow 2.5s ease-out forwards;
+}
+
+@keyframes spring-grow {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* ☀️ Summer */
+.summer-growth {
+  font-size: 18px;
+  animation: summer-grow 3s ease-out forwards;
+}
+
+@keyframes summer-grow {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+

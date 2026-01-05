@@ -90,46 +90,87 @@
             });
             
             /* ---------------------------
-   Seasonal Visual Effects
----------------------------- */
+             Seasonal Visual Effects
+            ---------------------------- */
 
-function runSeasonalEffect(type) {
-    const overlay = document.getElementById('seasonal-overlay');
-    if (!overlay) return;
+    function runSeasonalEffect(type) {
 
-    const particleCount = 24;
+    /* ❄️ / 🍂 unchanged */
+    if (type === 'snow' || type === 'fall') {
+        const overlay = document.getElementById('seasonal-overlay');
+        if (!overlay) return;
 
-    for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('season-particle');
+        const count = 24;
 
-        const left = Math.random() * 100;
-        const duration = 3 + Math.random() * 3;
-        const delay = Math.random() * 2;
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.classList.add('season-particle');
 
-        particle.style.left = `${left}vw`;
-        particle.style.animationDuration = `${duration}s`;
-        particle.style.animationDelay = `${delay}s`;
+            p.style.left = `${Math.random() * 100}vw`;
+            p.style.animationDuration = `${3 + Math.random() * 3}s`;
+            p.style.animationDelay = `${Math.random() * 2}s`;
 
-        if (type === 'snow') {
-            particle.classList.add('snowflake');
-            particle.textContent = '❄';
+            if (type === 'snow') {
+                p.classList.add('snowflake');
+                p.textContent = '❄';
+            } else {
+                p.classList.add('leaf');
+                p.textContent = '🍂';
+            }
+
+            overlay.appendChild(p);
         }
 
-        if (type === 'fall') {
-            particle.classList.add('leaf');
-            particle.textContent = '🍂';
-        }
-
-        overlay.appendChild(particle);
+        setTimeout(() => overlay.innerHTML = '', 5000);
+        return;
     }
 
-    // Clean up after animation
-    setTimeout(() => {
-        overlay.innerHTML = '';
-    }, 5000);
+    /* 🌱 / ☀️ header growth (safe placement) */
+    const header = document.querySelector('header');
+    const exclusion = document.querySelector('.logo-and-title');
+    if (!header || !exclusion) return;
+
+    const headerRect = header.getBoundingClientRect();
+    const exclusionRect = exclusion.getBoundingClientRect();
+
+    const count = 6 + Math.floor(Math.random() * 4); // 6–9 items
+    const padding = 20;
+
+    for (let i = 0; i < count; i++) {
+        const item = document.createElement('div');
+        item.classList.add('growth-item');
+
+        let x;
+
+        // Decide left or right side of logo/title
+        if (Math.random() < 0.4) {
+            // Left side
+            x = Math.random() * (exclusionRect.left - padding);
+        } else {
+            // Right side
+            const rightSpace =
+                headerRect.width - exclusionRect.right - padding;
+            x = exclusionRect.right + padding + Math.random() * rightSpace;
+        }
+
+        item.style.left = `${Math.max(0, x)}px`;
+
+        if (type === 'spring') {
+            item.classList.add('spring-growth');
+            item.textContent = '🌱';
+        }
+
+        if (type === 'summer') {
+            item.classList.add('summer-growth');
+            item.textContent = '🌳';
+        }
+
+        header.appendChild(item);
+
+        //setTimeout(() => item.remove(), 3500);
+    }
 }
-            
+
             
             // Seasonal default section logic
 const month = new Date().getMonth(); 
@@ -138,13 +179,22 @@ const month = new Date().getMonth();
 let defaultSection = 'mowing';
 
 if ([11, 0, 1].includes(month)) {
-    // Dec, Jan, Feb
     defaultSection = 'snow';
-    runSeasonalEffect('snow')
+    runSeasonalEffect('snow');
+
 } else if ([9, 10].includes(month)) {
-    // Oct, Nov
     defaultSection = 'fall-cleanup';
-    runSeasonalEffect('fall')
+    runSeasonalEffect('fall');
+
+} else if ([2, 3].includes(month)) {
+    // Mar, Apr
+    defaultSection = 'mowing';
+    runSeasonalEffect('spring');
+
+} else if ([4, 5, 6, 7].includes(month)) {
+    // May, Jun, Jul, Aug
+    defaultSection = 'mowing';
+    runSeasonalEffect('summer');
 }
 
 // Clear existing active states
