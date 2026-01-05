@@ -126,6 +126,16 @@
             gap: 20px;
             flex-wrap: wrap;
         }
+        .call-btn,
+        .quote-btn {
+          appearance: none;
+          -webkit-appearance: none;
+          border: none;
+          background: none;
+          box-sizing: border-box;
+          text-decoration: none;
+          font-family: inherit;
+        }
         
         .call-btn, .quote-btn {
             display: inline-flex;
@@ -140,6 +150,8 @@
             box-shadow: var(--shadow);
             cursor: pointer;
             border: none;
+            height: 48px;  /* 🔑 explicit height */
+            line-height: 1; /* 🔑 removes vertical text inflation */
         }
         
         .call-btn {
@@ -1056,4 +1068,59 @@
   
   
   
+}
+
+/* ============================
+   Seasonal Overlay Animations
+============================ */
+
+#seasonal-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+/* Shared particle styles */
+.season-particle {
+  position: absolute;
+  top: -10%;
+  opacity: 0.8;
+  animation-timing-function: linear;
+}
+
+/* ❄️ Snowflakes */
+.snowflake {
+  color: white;
+  font-size: 12px;
+  animation-name: snow-fall;
+}
+
+@keyframes snow-fall {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(120vh) translateX(40px);
+    opacity: 0;
+  }
+}
+
+/* 🍂 Leaves */
+.leaf {
+  font-size: 14px;
+  animation-name: leaf-fall;
+}
+
+@keyframes leaf-fall {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(120vh) rotate(360deg);
+    opacity: 0;
+  }
 }

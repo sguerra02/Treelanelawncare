@@ -89,6 +89,47 @@
                 }
             });
             
+            /* ---------------------------
+   Seasonal Visual Effects
+---------------------------- */
+
+function runSeasonalEffect(type) {
+    const overlay = document.getElementById('seasonal-overlay');
+    if (!overlay) return;
+
+    const particleCount = 24;
+
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('season-particle');
+
+        const left = Math.random() * 100;
+        const duration = 3 + Math.random() * 3;
+        const delay = Math.random() * 2;
+
+        particle.style.left = `${left}vw`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `${delay}s`;
+
+        if (type === 'snow') {
+            particle.classList.add('snowflake');
+            particle.textContent = '❄';
+        }
+
+        if (type === 'fall') {
+            particle.classList.add('leaf');
+            particle.textContent = '🍂';
+        }
+
+        overlay.appendChild(particle);
+    }
+
+    // Clean up after animation
+    setTimeout(() => {
+        overlay.innerHTML = '';
+    }, 5000);
+}
+            
             
             // Seasonal default section logic
 const month = new Date().getMonth(); 
@@ -99,9 +140,11 @@ let defaultSection = 'mowing';
 if ([11, 0, 1].includes(month)) {
     // Dec, Jan, Feb
     defaultSection = 'snow';
+    runSeasonalEffect('snow')
 } else if ([9, 10].includes(month)) {
     // Oct, Nov
     defaultSection = 'fall-cleanup';
+    runSeasonalEffect('fall')
 }
 
 // Clear existing active states
