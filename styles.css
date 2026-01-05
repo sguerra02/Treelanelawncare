@@ -910,48 +910,150 @@
             }
         }
         
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            nav ul {
-                flex-direction: column;
-            }
-            
-            nav ul li {
-                width: 100%;
-            }
-            
-            nav ul li a {
-                border-bottom: 1px solid #eee;
-                text-align: center;
-            }
-            
-            .carousel-img {
-                height: 300px;
-            }
-            
-            .review-section {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .review-btn {
-                margin: 0 auto;
-            }
-            
-            .services-group {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .footer-column h3::after {
-                left: 50%;
-                transform: translateX(-50%);
-            }
-        }
+/* ============================
+   Compact Mobile Nav Layout
+============================ */
+
+@media (max-width: 768px) {
+
+  nav {
+    transition: padding 0.2s ease;
+  }
+
+  /* -------- COMPACT MODE -------- */
+  nav.compact {
+    padding: 0;
+  }
+
+  /* Action buttons row */
+  nav.compact .call-btn,
+  nav.compact .quote-btn {
+    width: 50%;
+    border-radius: 0;
+    margin: 0;
+    padding: 14px 0;
+    font-size: 1rem;
+    justify-content: center;
+  }
+
+  nav.compact .call-btn span,
+  nav.compact .quote-btn span {
+    display: inline;
+  }
+
+  nav.compact .call-btn {
+    border-right: 1px solid rgba(255,255,255,0.3);
+  }
+
+  /* Button container effect */
+  nav.compact .call-btn,
+  nav.compact .quote-btn {
+    display: inline-flex;
+  }
+
+  /* Nav icon row */
+  nav.compact ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 6px 0;
+  }
+
+  nav.compact ul li {
+    flex: 1;
+    text-align: center;
+  }
+
+  nav.compact .nav-tab {
+    padding: 8px 0;
+    border-bottom: none;
+  }
+
+  nav.compact .nav-tab span {
+    display: none;
+  }
+
+  nav.compact .nav-tab i {
+    font-size: 1.3rem;
+  }
+
+  /* Remove extra spacing from normal layout */
+  nav.compact ul,
+  nav.compact li {
+    margin: 0;
+  }
+
+  nav.compact {
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.15);
+  }
+}
+
+/* ============================
+   Compact Mobile Nav Animation
+============================ */
+
+@media (max-width: 768px) {
+
+  /* Base nav state */
+  nav {
+    overflow: hidden;
+  }
+
+  /* Prepare animated elements */
+  nav ul,
+  nav .call-btn,
+  nav .quote-btn {
+    transition:
+      transform 0.25s ease,
+      opacity 0.2s ease;
+    will-change: transform;
+  }
+
+  /* -------- EXPANDED STATE -------- */
+  nav ul {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  nav .call-btn,
+  nav .quote-btn {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* -------- COMPACT STATE -------- */
+  nav.compact .call-btn,
+  nav.compact .quote-btn {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  nav.compact ul {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  /* Collapse spacing instantly (no animation on padding) */
+  nav.compact {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  /* Prevent flicker during fast scroll */
+  nav.compact ul,
+  nav.compact .call-btn,
+  nav.compact .quote-btn {
+    transition-delay: 0s;
+  }
+  nav.compact .call-btn,
+  nav.compact .quote-btn {
+    transition-delay: 0.05s;
+  }
+
+  nav.compact ul {
+    transition-delay: 0.1s;
+  }
+  
+  
+  
+}

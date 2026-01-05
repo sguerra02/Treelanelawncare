@@ -89,6 +89,40 @@
                 }
             });
             
+            
+            // Seasonal default section logic
+const month = new Date().getMonth(); 
+// Jan = 0, Feb = 1, ... Dec = 11
+
+let defaultSection = 'mowing';
+
+if ([11, 0, 1].includes(month)) {
+    // Dec, Jan, Feb
+    defaultSection = 'snow';
+} else if ([9, 10].includes(month)) {
+    // Oct, Nov
+    defaultSection = 'fall-cleanup';
+}
+
+// Clear existing active states
+tabs.forEach(tab => tab.classList.remove('active'));
+sections.forEach(section => section.classList.remove('active'));
+
+// Activate correct tab + section
+const activeTab = document.querySelector(`.nav-tab[data-section="${defaultSection}"]`);
+const activeSection = document.getElementById(defaultSection);
+
+if (activeTab && activeSection) {
+    activeTab.classList.add('active');
+    activeSection.classList.add('active');
+    
+    //activeSection.scrollIntoView({ behavior: 'smooth' });
+}
+            
+            
+            
+            
+            
             // Form submission
             submitQuote.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -139,4 +173,53 @@ ${details || 'No details provided'}
                 quoteForm.style.display = 'none';
                 confirmationMessage.style.display = 'block';
             });
+            
+/* ---------------------------
+       Mobile Compact Nav Logic
+    ---------------------------- */
+const nav = document.querySelector('nav');
+    const navList = nav.querySelector('ul');
+    const contactBar = document.querySelector('.contact-bar');
+    const callBtn = document.querySelector('.call-btn');
+    
+    const collapsePoint = 300;
+    let buttonsMoved = false;
+    let lockedHeight = null;
+
+    function lockNavHeight() {
+        if (!lockedHeight) {
+            lockedHeight = nav.offsetHeight;
+            nav.style.minHeight = `${lockedHeight}px`;
+        }
+    }
+
+    function unlockNavHeight() {
+        nav.style.minHeight = '';
+        lockedHeight = null;
+    }
+
+    window.addEventListener('scroll', () => {
+        if (window.innerWidth <= 768 && window.scrollY > collapsePoint) {
+            
+            nav.classList.add('compact');
+            lockNavHeight();
+
+            if (!buttonsMoved) {
+                nav.insertBefore(callBtn, navList);
+                nav.insertBefore(quoteBtn, navList);
+                buttonsMoved = true;
+            }
+
+        } else {
+            nav.classList.remove('compact');
+            unlockNavHeight();
+
+            if (buttonsMoved) {
+                contactBar.appendChild(callBtn);
+                contactBar.appendChild(quoteBtn);
+                buttonsMoved = false;
+            }
+        }
+    });
+
         });
