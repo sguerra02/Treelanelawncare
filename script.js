@@ -89,6 +89,133 @@
                 }
             });
             
+            /* ---------------------------
+             Seasonal Visual Effects
+            ---------------------------- */
+
+    function runSeasonalEffect(type) {
+
+    /* ❄️ / 🍂 unchanged */
+    if (type === 'snow' || type === 'fall') {
+        const overlay = document.getElementById('seasonal-overlay');
+        if (!overlay) return;
+
+        const count = 24;
+
+        for (let i = 0; i < count; i++) {
+            const p = document.createElement('div');
+            p.classList.add('season-particle');
+
+            p.style.left = `${Math.random() * 100}vw`;
+            p.style.animationDuration = `${3 + Math.random() * 3}s`;
+            p.style.animationDelay = `${Math.random() * 2}s`;
+
+            if (type === 'snow') {
+                p.classList.add('snowflake');
+                p.textContent = '❄';
+            } else {
+                p.classList.add('leaf');
+                p.textContent = '🍂';
+            }
+
+            overlay.appendChild(p);
+        }
+
+        setTimeout(() => overlay.innerHTML = '', 5000);
+        return;
+    }
+
+    /* 🌱 / ☀️ header growth (safe placement) */
+    const header = document.querySelector('header');
+    const exclusion = document.querySelector('.logo-and-title');
+    if (!header || !exclusion) return;
+
+    const headerRect = header.getBoundingClientRect();
+    const exclusionRect = exclusion.getBoundingClientRect();
+
+    const count = 6 + Math.floor(Math.random() * 4); // 6–9 items
+    const padding = 20;
+
+    for (let i = 0; i < count; i++) {
+        const item = document.createElement('div');
+        item.classList.add('growth-item');
+
+        let x;
+
+        // Decide left or right side of logo/title
+        if (Math.random() < 0.4) {
+            // Left side
+            x = Math.random() * (exclusionRect.left - padding);
+        } else {
+            // Right side
+            const rightSpace =
+                headerRect.width - exclusionRect.right - padding;
+            x = exclusionRect.right + padding + Math.random() * rightSpace;
+        }
+
+        item.style.left = `${Math.max(0, x)}px`;
+
+        if (type === 'spring') {
+            item.classList.add('spring-growth');
+            item.textContent = '🌱';
+        }
+
+        if (type === 'summer') {
+            item.classList.add('summer-growth');
+            item.textContent = '🌳';
+        }
+
+        header.appendChild(item);
+
+        //setTimeout(() => item.remove(), 3500);
+    }
+}
+
+            
+            // Seasonal default section logic
+const month = new Date().getMonth(); 
+// Jan = 0, Feb = 1, ... Dec = 11
+
+let defaultSection = 'mowing';
+
+if ([11, 0, 1].includes(month)) {
+    defaultSection = 'snow';
+    runSeasonalEffect('snow');
+
+} else if ([9, 10].includes(month)) {
+    defaultSection = 'fall-cleanup';
+    runSeasonalEffect('fall');
+
+} else if ([2, 3].includes(month)) {
+    // Mar, Apr
+    defaultSection = 'mowing';
+    runSeasonalEffect('spring');
+
+} else if ([4, 5, 6, 7].includes(month)) {
+    // May, Jun, Jul, Aug
+    defaultSection = 'mowing';
+    runSeasonalEffect('summer');
+}
+
+// Clear existing active states
+tabs.forEach(tab => tab.classList.remove('active'));
+sections.forEach(section => section.classList.remove('active'));
+
+// Activate correct tab + section
+const activeTab = document.querySelector(`.nav-tab[data-section="${defaultSection}"]`);
+const activeSection = document.getElementById(defaultSection);
+
+if (activeTab && activeSection) {
+    activeTab.classList.add('active');
+    activeSection.classList.add('active');
+    
+    //activeSection.scrollIntoView({ behavior: 'smooth' });
+}
+            
+            
+            
+            
+            
             // Form submission
             submitQuote.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -139,4 +266,53 @@ ${details || 'No details provided'}
                 quoteForm.style.display = 'none';
                 confirmationMessage.style.display = 'block';
             });
+            
+/* ---------------------------
+       Mobile Compact Nav Logic
+    ---------------------------- */
+const nav = document.querySelector('nav');
+    const navList = nav.querySelector('ul');
+    const contactBar = document.querySelector('.contact-bar');
+    const callBtn = document.querySelector('.call-btn');
+    
+    const collapsePoint = 300;
+    let buttonsMoved = false;
+    let lockedHeight = null;
+
+    function lockNavHeight() {
+        if (!lockedHeight) {
+            lockedHeight = nav.offsetHeight;
+            nav.style.minHeight = `${lockedHeight}px`;
+        }
+    }
+
+    function unlockNavHeight() {
+        nav.style.minHeight = '';
+        lockedHeight = null;
+    }
+
+    window.addEventListener('scroll', () => {
+        if (window.innerWidth <= 768 && window.scrollY > collapsePoint) {
+            
+            nav.classList.add('compact');
+            lockNavHeight();
+
+            if (!buttonsMoved) {
+                nav.insertBefore(callBtn, navList);
+                nav.insertBefore(quoteBtn, navList);
+                buttonsMoved = true;
+            }
+
+        } else {
+            nav.classList.remove('compact');
+            unlockNavHeight();
+
+            if (buttonsMoved) {
+                contactBar.appendChild(callBtn);
+                contactBar.appendChild(quoteBtn);
+                buttonsMoved = false;
+            }
+        }
+    });
+
         });
